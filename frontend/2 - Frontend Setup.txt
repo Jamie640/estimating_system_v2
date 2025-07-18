@@ -1,0 +1,72 @@
+✅ 1. Create the Frontend App
+Go to your project root:
+
+cd C:\Users\Jamie\estimating_system_V2
+npx create-react-app frontend --template typescript
+
+---------
+
+
+✅ 2. Start the React App
+After it’s done:
+
+cd frontend
+npm start
+
+
+---------
+
+This will open http://localhost:3000 in your browser.
+
+
+--------
+
+✅ Now Let’s Fetch Todos From the Backend
+Open:
+📄 frontend/src/App.tsx
+
+Replace everything with:
+
+import { useEffect, useState } from 'react';
+
+type Todo = {
+  id: number;
+  title: string;
+};
+
+function App() {
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  useEffect(() => {
+    fetch('http://localhost:3000/todos')
+      .then(res => res.json())
+      .then(setTodos)
+      .catch(console.error);
+  }, []);
+
+  return (
+    <div style={{ padding: '2rem' }}>
+      <h1>Todos</h1>
+      <ul>
+        {todos.map(todo => (
+          <li key={todo.id}>{todo.title}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default App;
+
+
+--------
+
+
+Save the file → your browser will auto-reload.
+
+
+
+
+
+
+
