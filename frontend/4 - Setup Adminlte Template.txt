@@ -1,0 +1,158 @@
+Import AdminLTE 3 Dashboard v2 (Dark) into Your React App
+
+1. 📁 Folder Structure (clean + scalable)
+Recommended structure:
+
+frontend/
+└── src/
+    ├── components/        → Your custom React components
+    ├── layouts/           → Dashboard layout wrapper
+    ├── pages/             → Main pages (Dashboard, Todos, etc.)
+    ├── assets/            → Static CSS, JS, fonts, images
+    └── App.tsx            → Main app with routing
+
+
+----
+
+
+2. 📦 Install Bootstrap + FontAwesome (required by AdminLTE)
+In frontend/:
+
+npm install bootstrap @fortawesome/fontawesome-free jquery
+
+
+-----
+
+
+✅ Next Step: Copy AdminLTE Assets
+Now do this:
+
+Download AdminLTE 3 (Free):
+👉 https://adminlte.io/themes/v3/
+
+From the downloaded zip:
+
+Go to AdminLTE-3.x/dist/
+
+Copy the following folders into your project:
+
+frontend/src/assets/adminlte/
+├── css/        ← copy from `dist/css/`
+├── js/         ← copy from `dist/js/`
+├── plugins/    ← copy from `plugins/` (in root)
+
+
+
+Use these exact paths so imports stay clean.
+
+
+-------------
+
+
+✅ Step 1: Import Styles Into React
+Open:
+📄 frontend/src/index.tsx
+
+Add these imports at the top:
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './assets/adminlte/plugins/fontawesome-free/css/all.min.css';
+import './assets/adminlte/css/adminlte.min.css';
+
+
+----------
+
+
+✅ Step 2: Create a Layout Component
+Create this file:
+📄 frontend/src/layouts/MainLayout.tsx
+
+Paste:
+
+
+import { ReactNode } from 'react';
+
+const MainLayout = ({ children }: { children: ReactNode }) => {
+  return (
+    <div className="wrapper">
+      {/* Navbar */}
+      <nav className="main-header navbar navbar-expand navbar-dark">
+        <ul className="navbar-nav">
+          <li className="nav-item">
+            <a href="/" className="nav-link">Home</a>
+          </li>
+        </ul>
+      </nav>
+
+      {/* Sidebar */}
+      <aside className="main-sidebar sidebar-dark-primary elevation-4">
+        <a href="/" className="brand-link">
+          <span className="brand-text font-weight-light">My App</span>
+        </a>
+        <div className="sidebar">
+          <nav className="mt-2">
+            <ul className="nav nav-pills nav-sidebar flex-column">
+              <li className="nav-item">
+                <a href="/" className="nav-link active">
+                  <i className="nav-icon fas fa-list"></i>
+                  <p>Todos</p>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </aside>
+
+      {/* Page content */}
+      <div className="content-wrapper p-3">
+        {children}
+      </div>
+    </div>
+  );
+};
+
+export default MainLayout;
+
+
+
+--------------
+
+
+✅ Step 3: Use It in App.tsx
+Update:
+📄 frontend/src/App.tsx
+
+import MainLayout from './layouts/MainLayout';
+// ... other imports stay the same
+
+function App() {
+  // ... state and logic stay the same
+  return (
+    <MainLayout>
+      {/* All your todo content here */}
+    </MainLayout>
+  );
+}
+
+
+----------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

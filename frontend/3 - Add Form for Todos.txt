@@ -1,0 +1,99 @@
+✅ Next Step: Add a Form to Create Todos
+Create new todos via POST requests?
+
+-Type a todo name
+-Click a button
+-It gets saved to the DB
+-The list refreshes
+
+----------
+
+
+✅ Step 1: Update the React App
+Open:
+📄 frontend/src/App.tsx
+
+Replace everything with this:
+
+
+import { useEffect, useState } from 'react';
+
+type Todo = {
+  id: number;
+  title: string;
+};
+
+function App() {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [newTodo, setNewTodo] = useState('');
+
+  const fetchTodos = () => {
+    fetch('http://localhost:3000/todos')
+      .then(res => res.json())
+      .then(setTodos)
+      .catch(console.error);
+  };
+
+  const addTodo = () => {
+    if (!newTodo.trim()) return;
+
+    fetch('http://localhost:3000/todos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: newTodo })
+    })
+      .then(() => {
+        setNewTodo('');
+        fetchTodos();
+      })
+      .catch(console.error);
+  };
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
+  return (
+    <div style={{ padding: '2rem' }}>
+      <h1>Todos</h1>
+
+      <input
+        value={newTodo}
+        onChange={e => setNewTodo(e.target.value)}
+        placeholder="Enter new todo"
+      />
+      <button onClick={addTodo}>Add Todo</button>
+
+      <ul>
+        {todos.map(todo => (
+          <li key={todo.id}>{todo.title}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default App;
+
+
+------------
+
+
+
+✅ Step 2: Add Backend Route to Handle POST
+Open:
+📄 backend/index.js
+
+Add this below your /todos GET route:
+
+
+app.post('/todos', async (req, res) => {
+  const { title } = req.body;
+  if (!title) return res.status(400).json({ error: 'Title is required' });
+
+  const newTodo = await prisma.todo.create({
+    data: { title }
+  });
+
+  res.json(newTodo);
+});

@@ -1,0 +1,138 @@
+mkdir backend
+cd backend
+npm init -y
+npm install express @prisma/client cors
+npm install --save-dev prisma nodemon
+npx prisma init
+
+
+✅ 1. Edit your database schema
+
+Open:
+📄 backend/prisma/schema.prisma
+Replace everything with:
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Todo {
+  id    Int     @id @default(autoincrement())
+  title String
+}
+
+
+-----------
+
+Lanch pgAdmin4
+
+-----------
+
+
+✅ 2. Create .env in the backend/ folder:
+
+Go to C:\Users\Jamie\estimating_system_V2\backend
+Right-click → New > Text Document
+Name it: .env
+Make sure you delete the .txt extension (Windows hides extensions by default, so enable that if needed)
+
+Open it and paste:
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/postgres"
+
+OR IF PASSWORD WAS SET UPON INSTALL:
+
+DB name: postgres
+User: postgres
+Password: Psr15001!
+
+DATABASE_URL="postgresql://postgres:Psr15001!@localhost:5432/postgres"
+
+
+This assumes your local PostgreSQL is running with:
+user: postgres
+password: postgres
+DB: postgres
+
+(if not, update those fields accordingly)
+
+
+-------
+
+
+npx prisma migrate dev --name init
+
+
+-------
+
+✅ Final Step: Create the Backend Server
+Create this file:
+📄 backend/index.js
+
+Paste this:
+
+const express = require('express');
+const cors = require('cors');
+const { PrismaClient } = require('@prisma/client');
+
+const app = express();
+const prisma = new PrismaClient();
+
+app.use(cors());
+app.use(express.json());
+
+app.get('/todos', async (req, res) => {
+  const todos = await prisma.todo.findMany();
+  res.json(todos);
+});
+
+app.listen(3000, () => {
+  console.log('✅ Server running at http://localhost:3000');
+});
+
+
+-------
+
+
+🔁 Add start script
+In package.json, update the scripts section to:
+
+
+"scripts": {
+  "dev": "nodemon index.js"
+}
+
+
+-------
+
+▶️ Start the backend server
+
+npm run dev
+You should see: ✅ Server running at http://localhost:3000
+
+-------
+
+Then open your browser and go to:
+http://localhost:3000/todos
+
+
+----
+
+Now it's setup. Upon reload, or next time backend needs launching:
+
+cd estimating_system_V2/backend
+npm run dev
+
+That starts your backend server with live reload (thanks to nodemon), and it's ready to respond to API requests at:
+http://localhost:3000
+
+
+
+
+
+
+
